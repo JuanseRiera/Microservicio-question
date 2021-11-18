@@ -1,9 +1,10 @@
+import { ObjectId } from "mongodb";
 import { IResponse, Response } from "../models";
 
 export interface ResponseRequest {
   description: string;
   idUser: string;
-  idQuestion: string;
+  idQuestion: ObjectId;
 }
 
 export async function createResponseService(body: ResponseRequest) {

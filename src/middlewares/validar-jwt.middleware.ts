@@ -1,12 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import * as error from "../helper/errors";
 import * as token from "../token";
-import nodeCache from "node-cache";
-
-const sessionCache = new nodeCache({ stdTTL: 3600, checkperiod: 60 });
-
 const validarJWT = async (req: Request, res: Response, next: NextFunction) => {
   const auth = req.header("Authorization");
+
   if (!auth) {
     return error.handle(
       res,
@@ -34,13 +31,14 @@ const validarAdminJWT = async (
     return throwUnauthorizedError(res);
   }
 
+  let sessionCache = token.getSessionCache();
   const cachedSession: any = sessionCache.get(auth);
 
   if (cachedSession == null) {
     return throwUnauthorizedError(res);
   }
 
-  if (!cachedSession.permissions.contains("admin")) {
+  if (!cachedSession.permissions.includes("admin")) {
     return throwUnauthorizedError(res);
   }
 

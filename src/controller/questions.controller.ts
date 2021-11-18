@@ -20,6 +20,7 @@ export async function createQuestion(request: Request, response: Response) {
       idArticle,
       description,
     });
+
     buscarArticulo(idArticle, usuarioAutenticado.token).then(
       (response) => {
         //realizar validaciones
@@ -33,7 +34,6 @@ export async function createQuestion(request: Request, response: Response) {
       },
       (error) => {
         //Eliminar question
-        console.log(error);
         deleteQuestionPermanentlyService(question.id).catch((err) =>
           console.log(err)
         );
@@ -59,13 +59,23 @@ export async function editQuestion(request: Request, response: Response) {
       response.status(406).json({
         message: "No se puede editar una pregunta que ya tiene respuesta",
       });
+      return;
     }
 
     if (perviousQuestion && perviousQuestion.idUser !== idUser) {
       response.status(406).json({
         message: "Solo el usuario que creó la pregunta la puede editar",
       });
+      return;
     }
+
+    if (perviousQuestion && perviousQuestion.endDate) {
+      response.status(406).json({
+        message: "No se puede editar una pregunta que ya había sido eliminada",
+      });
+      return;
+    }
+
     let question = await editQuestionService(id, {
       description,
       edited: new Date(),
@@ -90,8 +100,9 @@ export async function deleteQuestion(request: Request, response: Response) {
 
     if (perviousQuestion && perviousQuestion.idUser !== idUser) {
       response.status(406).json({
-        message: "Solo el usuario que creo la pregunta la puede borrar",
+        message: "Solo el usuario que creó la pregunta la puede borrar",
       });
+      return;
     }
     let question = await deleteQuestionService(id);
 

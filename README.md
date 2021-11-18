@@ -1,22 +1,62 @@
-# Microservicio Question
+# Microservicios Question
 
 ## Indices
 
-- [Create question - Microservicio Questions](#1-create-question---microservicio-questions)
-- [Delete question - Microservicio Quesions](#2-delete-question---microservicio-quesions)
+- [Get questions of article - Microservicio Questions](#1-get-questions-of-article---microservicio-questions)
+- [Create question - Microservicio questions](#2-create-question---microservicio-questions)
 - [Edit question - Microservicio Questions](#3-edit-question---microservicio-questions)
-- [Get questions of article - Microservicio Questions](#4-get-questions-of-article---microservicio-questions)
+- [Delete question - Microservicio Quesions](#4-delete-question---microservicio-quesions)
+- [Create response - Microservicio Questions](#5-create-response---microservicio-questions)
+- [Edit response - Microservicio Questions](#6-edit-response---microservicio-questions)
+- [Delete response - Microservicio Questions](#7-delete-response---microservicio-questions)
 
 ---
 
-### 1. Create question - Microservicio Questions
+### 1. Get questions of article - Microservicio Questions
+
+**_Endpoint:_**
+
+```bash
+Method: GET
+Type:
+URL: http://localhost:3005/v1/questions/${{idArticle}}
+```
+
+**_Response:_**
+
+```js
+{
+    "questions": [
+        {
+            "_id": ${{idQuestion}},
+            "initDate": "2021-11-18T15:16:29.168Z",
+            "description": "Esta es una pregunta importante editada",
+            "idArticle": ${{idArticle}},
+            "idUser": ${{idUser}},
+            "__v": 0,
+            "response": {
+                "_id": ${{idResponse}},
+                "initDate": "2021-11-18T15:26:51.272Z",
+                "question": ${{idQuestion}},
+                "idUser": ${{idUser}},
+                "description": "Esto es una respuesta importante editada",
+                "__v": 0,
+                "edited": "2021-11-18T15:27:35.079Z",
+                "editedBy": ${{idUser}}
+            }
+        }
+    ]
+}
+```
+
+### 2. Create question - Microservicio questions
 
 **_Endpoint:_**
 
 ```bash
 Method: POST
 Type: RAW
-URL: http://localhost:3002/v1/articles
+URL: http://localhost:3005/v1/questions
 ```
 
 **_Headers:_**
@@ -29,29 +69,26 @@ URL: http://localhost:3002/v1/articles
 
 ```js
 {
-    "name": "juanse",
-    "description": "articulo juanse",
-    "image": "hjhhewwwwwwwwwwwwwwwwwwwwwwewwej",
-    "price": 100,
-    "stock": 100
+    "idArticle": ${{idArticle}},
+    "description":"Esta es una pregunta importante"
 }
 ```
 
-### 2. Delete question - Microservicio Quesions
+**_Response:_**
 
-**_Endpoint:_**
-
-```bash
-Method: DELETE
-Type:
-URL: http://localhost:3005/v1/questions/61943e8f9ab33cb981a9ba29
+```js
+{
+    "message": "Se registró la pregunta correctamente",
+    "question": {
+        "initDate": "2021-11-18T15:54:56.066Z",
+        "_id": ${{idQuestion}},
+        "description": "Esta es una pregunta importante",
+        "idArticle": ${{idArticle}},
+        "idUser": ${{idUser}},
+        "__v": 0
+    }
+}
 ```
-
-**_Headers:_**
-
-| Key           | Value          | Description |
-| ------------- | -------------- | ----------- |
-| Authorization | bearer {{jwt}} |             |
 
 ### 3. Edit question - Microservicio Questions
 
@@ -73,21 +110,196 @@ URL: http://localhost:3005/v1/questions
 
 ```js
 {
-    "id":"61943eb04ebdcc279df8138c",
-    "description":"¿Cual es el precio juanse te amo?"
+    "id": ${{idQuestion}},
+    "description":"Esta es una pregunta importante editada"
 }
 ```
 
-### 4. Get questions of article - Microservicio Questions
+**_Response:_**
+
+```js
+{
+    "message": "Se editó la pregunta correctamente",
+    "question": {
+        "_id": ${{idQuestion}},
+        "initDate": "2021-11-18T15:54:56.066Z",
+        "description": "Esta es una pregunta importante editada",
+        "idArticle": ${{idArticle}},
+        "idUser": ${{idUser}},
+        "__v": 0
+    }
+}
+```
+
+### 4. Delete question - Microservicio Quesions
 
 **_Endpoint:_**
 
 ```bash
-Method: GET
+Method: DELETE
 Type:
-URL: http://localhost:3005/v1/questions/619433da10f225e4c18232fc
+URL: http://localhost:3005/v1/questions/${{idQuestion}}
 ```
 
----
+**_Headers:_**
 
-[Back to top](#microservicios-question)
+| Key           | Value          | Description |
+| ------------- | -------------- | ----------- |
+| Authorization | bearer {{jwt}} |             |
+
+**_Response:_**
+
+```js
+{
+    "message": "Se eliminó la pregunta correctamente",
+    "question": {
+        "_id": ${{idQuestion}},
+        "initDate": "2021-11-18T15:54:56.066Z",
+        "description": "Esta es una pregunta importante editada",
+        "idArticle": ${{idArticle}},
+        "idUser": ${{idUser}},
+        "__v": 0,
+        "endDate": "2021-11-18T15:58:29.506Z"
+    }
+}
+```
+
+### 5. Create response - Microservicio Questions
+
+**_Endpoint:_**
+
+```bash
+Method: POST
+Type: RAW
+URL: http://localhost:3005/v1/responses
+```
+
+**_Headers:_**
+
+| Key           | Value          | Description |
+| ------------- | -------------- | ----------- |
+| Authorization | bearer {{jwt}} |             |
+
+**_Body:_**
+
+```js
+{
+    "idQuestion": ${{idQuestion}},
+    "description":"Esto es una respuesta importante"
+}
+```
+
+**_Response:_**
+
+```js
+{
+    "message": "Se registró la respuesta correctamente",
+    "response": {
+        "initDate": "2021-11-18T15:59:35.307Z",
+        "_id": ${{idResponse}},
+        "question": ${{idQuestion}},
+        "idUser": ${{idUser}},
+        "description": "Esto es una respuesta importante",
+        "__v": 0
+    },
+    "question": {
+        "_id": ${{idQuestion}},
+        "initDate": "2021-11-18T15:54:56.066Z",
+        "description": "Esta es una pregunta importante editada",
+        "idArticle": ${{idArticle}},
+        "idUser": ${{idUser}},
+        "__v": 0,
+        "endDate": "2021-11-18T15:58:29.506Z",
+        "response": ${{idResponse}}
+    }
+}
+```
+
+### 6. Edit response - Microservicio Questions
+
+**_Endpoint:_**
+
+```bash
+Method: PUT
+Type: RAW
+URL: http://localhost:3005/v1/responses
+```
+
+**_Headers:_**
+
+| Key           | Value          | Description |
+| ------------- | -------------- | ----------- |
+| Authorization | bearer {{jwt}} |             |
+
+**_Body:_**
+
+```js
+{
+    "id":${{idResponse}},
+    "description":"Esto es una respuesta importante editada"
+}
+```
+
+**_Response:_**
+
+```js
+{
+    "message": "Se editó la respuesta correctamente",
+    "response": {
+        "_id": ${{idResponse}},
+        "initDate": "2021-11-18T15:59:35.307Z",
+        "question": ${{idQuestion}},
+        "idUser": ${{idUser}},
+        "description": "Esto es una respuesta importante editada",
+        "__v": 0,
+        "edited": "2021-11-18T16:00:58.171Z",
+        "editedBy": ${{idUser}}
+    }
+}
+```
+
+### 7. Delete response - Microservicio Questions
+
+**_Endpoint:_**
+
+```bash
+Method: DELETE
+Type:
+URL: http://localhost:3005/v1/responses/${{idResponse}}
+```
+
+**_Headers:_**
+
+| Key           | Value          | Description |
+| ------------- | -------------- | ----------- |
+| Authorization | bearer {{jwt}} |             |
+
+**_Response:_**
+
+```js
+{
+    "message": "Se eliminó la respuesta correctamente",
+    "response": {
+        "_id": ${{idResponse}},
+        "initDate": "2021-11-18T15:59:35.307Z",
+        "question": ${{idQuestion}},
+        "idUser": ${{idUser}},
+        "description": "Esto es una respuesta importante editada",
+        "__v": 0,
+        "edited": "2021-11-18T16:00:58.171Z",
+        "editedBy": ${{idUser}},
+        "deletedBy": ${{idUser}},
+        "endDate": "2021-11-18T16:01:56.920Z"
+    },
+    "question": {
+        "_id": ${{idQuestion}},
+        "initDate": "2021-11-18T15:54:56.066Z",
+        "description": "Esta es una pregunta importante editada",
+        "idArticle": ${{idArticle}},
+        "idUser": ${{idUser}},
+        "__v": 0,
+        "endDate": "2021-11-18T15:58:29.506Z",
+        "response": null
+    }
+}
+```

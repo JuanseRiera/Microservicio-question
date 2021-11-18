@@ -7,6 +7,7 @@ import {
 import {
   createResponseService,
   editResponseService,
+  findResponseService,
 } from "../services/responses.service";
 
 export async function createResponse(request: Request, res: Response) {
@@ -31,7 +32,7 @@ export async function createResponse(request: Request, res: Response) {
 
     if (perviousQuestion.response) {
       res.status(406).json({
-        message: "La pregunta ya había sido respondida",
+        message: "La pregunta ya ha sido respondida",
       });
       return;
     }
@@ -55,6 +56,22 @@ export async function editResponse(req: Request, res: Response) {
   let idUser = usuarioAutenticado.user.id;
 
   try {
+    let previousResponse = await findResponseService(id);
+
+    if (!previousResponse) {
+      res.status(406).json({
+        message: "No existe la respuesta proporcionada",
+      });
+      return;
+    }
+
+    if (previousResponse.endDate) {
+      res.status(406).json({
+        message: "No se puede editar una pregunta que ya ha sido eliminada",
+      });
+      return;
+    }
+
     let response = await editResponseService(id, {
       description,
       edited: new Date(),
@@ -75,14 +92,42 @@ export async function deleteResponse(req: Request, res: Response) {
   let idUser = req.body.usuarioAutenticado.user.id;
 
   try {
+    let previousResponse = await findResponseService(id);
+
+    if (!previousResponse) {
+      res.status(406).json({
+        message: "No existe la respuesta proporcionada",
+      });
+      return;
+    }
+
+    if (previousResponse.endDate) {
+      res.status(406).json({
+        message: "La respuesta ya había sido eliminada",
+      });
+      return;
+    }
+
     let response = await editResponseService(id, {
       endDate: new Date(),
       deletedBy: idUser,
     });
 
+    if (!response) {
+      res.status(406).json({
+        message: "No existe la respuesta proporcionada",
+      });
+      return;
+    }
+
+    let question = await editQuestionService(response.question.toString(), {
+      response: null,
+    });
+
     res.status(200).json({
       message: "Se eliminó la respuesta correctamente",
       response,
+      question,
     });
   } catch (err) {
     error.handle(res, err);

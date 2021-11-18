@@ -56,6 +56,10 @@ export async function validate(auth: string): Promise<ISession> {
   });
 }
 
+export function getSessionCache() {
+  return sessionCache;
+}
+
 export function invalidate(token: string) {
   if (sessionCache.get(token)) {
     sessionCache.del(token);

@@ -1,9 +1,10 @@
+import { ObjectId } from "mongodb";
 import { Schema, model, Document } from "mongoose";
 
 export interface IQuestion extends Document {
   idArticle: string;
   idUser: string;
-  response: string;
+  response: ObjectId;
   description: string;
   edited: Date;
   initDate: Date;

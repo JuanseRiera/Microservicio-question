@@ -1,12 +1,13 @@
+import { ObjectId } from "mongodb";
 import { Document, Schema, model } from "mongoose";
 
 export interface IResponse extends Document {
-  question: String;
-  idUser: String;
-  description: String;
+  question: ObjectId;
+  idUser: string;
+  description: string;
   edited: Date;
-  editedBy: String;
-  deleteddBy: String;
+  editedBy: string;
+  deletedBy: string;
   initDate: Date;
   endDate: Date;
 }
