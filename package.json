@@ -1,0 +1,39 @@
+{
+  "name": "microservicio-questions",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon ./src/app.ts",
+    "build": "npm run build-ts",
+    "serve": "node dist/server.js",
+    "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\"  \"npm run watch-ts\" \"nodemon dist/server.js\"",
+    "build-ts": "tsc -p tsconfig.json",
+    "watch-ts": "tsc -w -p tsconfig.json",
+    "tslint": "tslint -c tslint.json -p tsconfig.json",
+    "apidoc": "./node_modules/.bin/apidoc -i src -o ./dist/public",
+    "apidocmd": "./node_modules/.bin/apidoc-markdown2 -p ./dist/public -o README-API.md"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "amqplib": "^0.8.0",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-validator": "^6.13.0",
+    "mongodb": "^4.1.4",
+    "mongoose": "^6.0.13",
+    "node-cache": "^5.1.2",
+    "nodemon": "^2.0.15",
+    "ts-node": "^10.4.0",
+    "typed-rest-client": "^1.8.6"
+  },
+  "devDependencies": {
+    "@types/amqplib": "^0.8.2",
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.13",
+    "@types/node": "^16.11.7",
+    "typescript": "^4.4.4"
+  }
+}
