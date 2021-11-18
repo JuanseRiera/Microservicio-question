@@ -1,5 +1,14 @@
 # Microservicios Question
 
+## Para correrlo
+
+Para poder correr el proyecto es necesario:
+* Correr los microservicios auth y catalog.
+* Configurar las variables de entorno en un archivo que se deberá crear, cuyo nombre deberá ser ".env". (Ver .example.env).
+* Correr el proyecto con Node 16 o mayor y con el comando npm start
+
+
+---
 ## Indices
 
 - [Get questions of article - Microservicio Questions](#1-get-questions-of-article---microservicio-questions)
