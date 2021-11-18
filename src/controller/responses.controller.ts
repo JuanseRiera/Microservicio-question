@@ -53,7 +53,15 @@ export async function createResponse(request: Request, res: Response) {
 
 export async function editResponse(req: Request, res: Response) {
   const { id, description, usuarioAutenticado } = req.body;
+  const { idRespuesta } = req.params;
   let idUser = usuarioAutenticado.user.id;
+
+  if (!id || !idRespuesta || id !== idRespuesta) {
+    res.status(406).json({
+      message: "Los ids enviados deben coincidir",
+    });
+    return;
+  }
 
   try {
     let previousResponse = await findResponseService(id);

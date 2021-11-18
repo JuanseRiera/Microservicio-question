@@ -25,10 +25,11 @@ router.post(
 );
 
 router.put(
-  "/",
+  "/:idRespuesta",
   [
     validarJWT,
     validarAdminJWT,
+    check("idRespuesta", "El id de la respuesta debe ser válido").isMongoId(),
     check("id", "El id de la respuesta es obligatorio").isMongoId(),
     check("description", "La descripción es obligatoria").isString(),
     check(

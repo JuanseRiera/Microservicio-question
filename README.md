@@ -97,7 +97,7 @@ URL: http://localhost:3005/v1/questions
 ```bash
 Method: PUT
 Type: RAW
-URL: http://localhost:3005/v1/questions
+URL: http://localhost:3005/v1/questions/${{idQuestion}}
 ```
 
 **_Headers:_**
@@ -222,7 +222,7 @@ URL: http://localhost:3005/v1/responses
 ```bash
 Method: PUT
 Type: RAW
-URL: http://localhost:3005/v1/responses
+URL: http://localhost:3005/v1/responses/${{idResponse}}
 ```
 
 **_Headers:_**

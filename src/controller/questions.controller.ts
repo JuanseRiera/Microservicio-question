@@ -51,20 +51,31 @@ export async function createQuestion(request: Request, response: Response) {
 
 export async function editQuestion(request: Request, response: Response) {
   const { id, description, usuarioAutenticado } = request.body;
+  const { idPregunta } = request.params;
   let idUser = usuarioAutenticado.user.id;
+
+  if (!id || !idPregunta || id !== idPregunta) {
+    response.status(406).json({
+      message: "Los ids enviados deben coincidir",
+    });
+    return;
+  }
 
   try {
     let perviousQuestion = await findQuestionService(id);
     if (perviousQuestion && perviousQuestion.response) {
-      response.status(406).json({
-        message: "No se puede editar una pregunta que ya tiene respuesta",
-      });
-      return;
     }
 
     if (perviousQuestion && perviousQuestion.idUser !== idUser) {
       response.status(406).json({
         message: "Solo el usuario que creó la pregunta la puede editar",
+      });
+      return;
+    }
+
+    if (perviousQuestion && perviousQuestion.response) {
+      response.status(406).json({
+        message: "No se puede editar una pregunta que posee una respuesta",
       });
       return;
     }

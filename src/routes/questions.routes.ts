@@ -32,10 +32,11 @@ router.post(
 );
 
 router.put(
-  "/",
+  "/:idPregunta",
   [
     validarJWT,
     check("id", "El id de la pregunta es obligatorio").isMongoId(),
+    check("idPregunta", "El id de la respuesta debe ser válido").isMongoId(),
     check("description", "La descripción es obligatoria").isString(),
     check(
       "description",
